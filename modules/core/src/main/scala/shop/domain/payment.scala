@@ -6,10 +6,9 @@ import squants.market.Money
 
 object payment {
   case class Payment(
-                      id: UserId,
-                      total: Money,
-                      card: Card
-                    )
-
+      id: UserId,
+      total: Money,
+      card: Card
+  )
 
 }

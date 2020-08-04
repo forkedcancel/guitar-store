@@ -1,6 +1,6 @@
 package shop.algebras
 
-import shop.domain.auth.{JwtToken, Password, UserId, UserName}
+import shop.domain.auth.{ JwtToken, Password, UserId, UserName }
 
 trait Auth[F[_]] {
   def findUser(token: JwtToken): F[Option[User]]
@@ -12,8 +12,7 @@ trait Auth[F[_]] {
   def logout(token: JwtToken, username: UserName): F[Unit]
 }
 
-
 case class User(
-                 id: UserId,
-                 userName: UserName,
-               )
+    id: UserId,
+    userName: UserName
+)

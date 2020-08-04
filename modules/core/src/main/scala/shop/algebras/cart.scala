@@ -6,10 +6,10 @@ import shop.domain.item.ItemId
 
 trait ShoppingCart[F[_]] {
   def add(
-           userId: UserId,
-           itemId: ItemId,
-           quantity: Quantity
-         ): F[Unit]
+      userId: UserId,
+      itemId: ItemId,
+      quantity: Quantity
+  ): F[Unit]
 
   def delete(userId: UserId): F[Unit]
 
@@ -20,5 +20,3 @@ trait ShoppingCart[F[_]] {
   def update(userId: UserId, cart: Cart): F[Unit]
 
 }
-
-

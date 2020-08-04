@@ -14,24 +14,24 @@ object item {
   @newtype case class ItemDescription(value: String)
 
   case class Item(
-                   uuid: ItemId,
-                   name: ItemName,
-                   description: ItemDescription,
-                   price: Money,
-                   brand: Brand,
-                   category: Category
-                 )
+      uuid: ItemId,
+      name: ItemName,
+      description: ItemDescription,
+      price: Money,
+      brand: Brand,
+      category: Category
+  )
 
   case class CreateItem(
-                         name: ItemName,
-                         description: ItemDescription,
-                         price: Money,
-                         brandId: BrandId,
-                         categoryId: CategoryId
-                       )
+      name: ItemName,
+      description: ItemDescription,
+      price: Money,
+      brandId: BrandId,
+      categoryId: CategoryId
+  )
 
   case class UpdateItem(
-                         id: ItemId,
-                         price: Money
-                       )
+      id: ItemId,
+      price: Money
+  )
 }

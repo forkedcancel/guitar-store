@@ -3,8 +3,11 @@ package shop.domain
 import java.util.UUID
 
 import io.estatico.newtype.macros.newtype
+import shop.domain.auth.UserId
 import shop.domain.item._
 import squants.market.Money
+
+import scala.util.control.NoStackTrace
 
 object cart {
 
@@ -17,5 +20,7 @@ object cart {
   case class CartItem(item: Item, quantity: Quantity)
 
   case class CartTotal(items: List[CartItem], total: Money)
+
+  case class CartNotFound(userId: UserId) extends NoStackTrace
 
 }

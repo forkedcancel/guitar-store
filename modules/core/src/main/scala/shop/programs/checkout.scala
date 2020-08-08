@@ -4,7 +4,6 @@ import cats.effect.Timer
 import cats.implicits._
 import io.chrisdavenport.log4cats.Logger
 import retry.RetryDetails._
-import retry.RetryPolicies.{ exponentialBackoff, limitRetries }
 import retry._
 import shop.algebras._
 import shop.domain.auth.UserId
@@ -12,8 +11,8 @@ import shop.domain.cart.{ CartItem, CartTotal }
 import shop.domain.checkout._
 import shop.domain.order._
 import shop.domain.payment._
-import shop.effects.effects.MonadThrow
-import shop.effects.Background
+import shop.effects._
+import shop.http.clients.PaymentClient
 import squants.market.Money
 
 import scala.concurrent.duration._
@@ -21,7 +20,8 @@ import scala.concurrent.duration._
 final class CheckoutProgram[F[_]: Background: Logger: MonadThrow: Timer](
     paymentClient: PaymentClient[F],
     shoppingCart: ShoppingCart[F],
-    orders: Orders[F]
+    orders: Orders[F],
+    retryPolicy: RetryPolicy[F]
 ) {
 
   def createOrder(
@@ -41,9 +41,8 @@ final class CheckoutProgram[F[_]: Background: Logger: MonadThrow: Timer](
         }
         .onError {
           case _ =>
-            Logger[F].error(
-              s"Failed to create order for $paymentId"
-            ) *> Background[F].schedule(bgAction(fa), 1.hour)
+            Logger[F].error(s"Failed to create order for Payment: ${paymentId}. Rescheduling as a background action") *>
+                Background[F].schedule(bgAction(fa), 1.hour)
         }
 
     bgAction(action)
@@ -89,5 +88,5 @@ final class CheckoutProgram[F[_]: Background: Logger: MonadThrow: Timer](
         )
     }
 
-  val retryPolicy = limitRetries[F](3) |+| exponentialBackoff[F](10.milliseconds)
+//  val retryPolicy = limitRetries[F](3) |+| exponentialBackoff[F](10.milliseconds)
 }
